@@ -8,7 +8,7 @@ const settings = {
   dimensions: [ 2048, 2048 ]
 };
   // defining the margin for linear extrapolation
-  const margin = 300
+  const margin = 200
   const sketch = () => {
     // The function that creates grids
     const createGrid = () => {
@@ -20,7 +20,7 @@ const settings = {
           let u = count <1? 0.5: x/(count-1);
           let v = count <1? 0.5: y/(count-1);
           points.push({
-            radius: Math.abs(0.001 + random.gaussian() * 0.008),
+            radius: Math.abs(0.001 + random.gaussian() * 0.02),
             position: [u,v],
             color: random.pick(palette)
           });
@@ -53,7 +53,7 @@ const settings = {
 
       // Create each circle
       context.beginPath();
-      context.arc(x,y,radius * width,0, Math.PI *2,false);
+      context.arc(x,y,radius * width,25, Math.PI + (Math.PI * 20) / 2,true);
       context.fillStyle = color;
       context.fill()
       // context.lineWidth = 15;

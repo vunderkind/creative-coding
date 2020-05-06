@@ -2,6 +2,7 @@
 const canvasSketch = require('canvas-sketch');
 const {lerp} = require('canvas-sketch-util/math')
 const random = require('canvas-sketch-util/random')
+const palettes = require('nice-color-palettes')
 
 const settings = {
   dimensions: [ 2048, 2048 ]
@@ -20,13 +21,15 @@ const settings = {
           let v = count <1? 0.5: y/(count-1);
           points.push({
             radius: Math.abs(0.001 + random.gaussian() * 0.008),
-            position: [u,v]
+            position: [u,v],
+            color: random.pick(palette)
           });
         }
       }
       return points;
     };
     //create instance of the grid, which we'll feed into the canvas in the next step
+    const palette = random.pick(palettes)
     random.setSeed(10);
     const points = createGrid().filter(()=>random.value()>0.4);
     console.log(points)
@@ -39,7 +42,8 @@ const settings = {
     points.forEach(data => {
       const {
         position,
-        radius
+        radius,
+        color
       } = data;
 
       const [u,v] = position
@@ -50,7 +54,7 @@ const settings = {
       // Create each circle
       context.beginPath();
       context.arc(x,y,radius * width,0, Math.PI *2,false);
-      context.fillStyle = '#3DDC97';
+      context.fillStyle = color;
       context.fill()
       // context.lineWidth = 15;
       // context.stroke()

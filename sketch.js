@@ -1,27 +1,34 @@
 
 const canvasSketch = require('canvas-sketch');
+const {lerp} = require('canvas-sketch-util/math')
+const random = require('canvas-sketch-util/random')
 
 const settings = {
   dimensions: [ 2048, 2048 ]
 };
-
+  // defining the margin for linear extrapolation
+  const margin = 300
   const sketch = () => {
     // The function that creates grids
     const createGrid = () => {
-      let count = 3;
+      let count = 30;
       const points = []
       for (let x=0;x<count;x++){
         for (let y=0;y<count;y++){
           //uv coordinates go from 0-1, with 0.5,0.5 being the center of the grid
           let u = count <1? 0.5: x/(count-1);
           let v = count <1? 0.5: y/(count-1);
-          points.push([u,v]);
+          points.push({
+            radius: Math.abs(0.001 + random.gaussian() * 0.008),
+            position: [u,v]
+          });
         }
       }
       return points;
     };
     //create instance of the grid, which we'll feed into the canvas in the next step
-    const points = createGrid();
+    random.setSeed(10);
+    const points = createGrid().filter(()=>random.value()>0.4);
     console.log(points)
 
   return ({ context, width, height }) => {
@@ -29,17 +36,24 @@ const settings = {
     context.fillRect(0, 0, width, height);
 
     //destructure uv coordinates and paint as circles on canvas
-    points.forEach(([u,v]) => {
+    points.forEach(data => {
+      const {
+        position,
+        radius
+      } = data;
+
+      const [u,v] = position
       //increase size of points coordinates to be aware of canvas
-      const x = u * width;
-      const y = v * height;
+      const x = lerp(margin, width-margin,u)
+      const y = lerp(margin,height-margin,v);
 
       // Create each circle
       context.beginPath();
-      context.arc(x,y,200,0, Math.PI *2,false);
-      context.strokeStyle = 'yellow';
-      context.lineWidth = 5;
-      context.stroke()
+      context.arc(x,y,radius * width,0, Math.PI *2,false);
+      context.fillStyle = '#3DDC97';
+      context.fill()
+      // context.lineWidth = 15;
+      // context.stroke()
 
       
     });

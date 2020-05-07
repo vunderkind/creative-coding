@@ -5,21 +5,21 @@ const random = require('canvas-sketch-util/random')
 const palettes = require('nice-color-palettes')
 
 const settings = {
-  dimensions: [ 1125,2436]
+  dimensions: [ 2048,2048]
 };
   // defining the margin for linear extrapolation
   const margin = 50
   const sketch = () => {
     // The function that creates grids
     const createGrid = () => {
-      let count = 50;
+      let count = 20;
       const points = []
       for (let x=0;x<count;x++){
         for (let y=0;y<count;y++){
           //uv coordinates go from 0-1, with 0.5,0.5 being the center of the grid
           let u = count <1? 0.5: x/(count-1);
           let v = count <1? 0.5: y/(count-1);
-          const radius = Math.abs(random.noise2D(u,v)) * 0.2
+          const radius = Math.abs(random.noise2D(u,v)) * 0.3
           points.push({
             radius,
             position: [u,v],
@@ -34,10 +34,10 @@ const settings = {
     const palette = random.pick(palettes)
     // random.setSeed(10);
     const points = createGrid().filter(()=>random.value()>0.5);
-    console.log(points)
+    // console.log(points)
 
   return ({ context, width, height }) => {
-    context.fillStyle = '#e1bb80';
+    context.fillStyle = '#f0f7f4';
     context.fillRect(0, 0, width, height);
 
     //destructure uv coordinates and paint as circles on canvas
@@ -68,7 +68,7 @@ const settings = {
       context.font = `${radius * width}px "Arial"`;
       context.translate(x,y) // translate to grid coordinate
       context.rotate(rotation) //rotate canvas by 1 radian
-      context.fillText('=',0,0) // draw
+      context.fillText('☂',0,0) // draw
       
       context.restore(); //restore canvas state
 

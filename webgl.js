@@ -48,19 +48,17 @@ const sketch = ({ context }) => {
   // Setup a mesh with geometry + material
   const mesh = new THREE.Mesh(
     new THREE.BoxGeometry(1,1,1),
-    new THREE.MeshPhysicalMaterial({
+    new THREE.MeshBasicMaterial({
       color: 'white',
-      roughness: 0.75,
-      flatShading: true
     })
   );
   scene.add(mesh);
 
-  scene.add(new THREE.AmbientLight('#59314f'))
+  // scene.add(new THREE.AmbientLight('#59314f'))
 
-  const light = new THREE.PointLight('#45caf7', 1, 15.5);
-  light.position.set(2,2,-4).multiplyScalar(1.5)
-  scene.add(light);
+  // const light = new THREE.PointLight('#45caf7', 1, 15.5);
+  // light.position.set(2,2,-4).multiplyScalar(1.5)
+  // scene.add(light);
 
   // draw each frame
   return {
@@ -73,7 +71,7 @@ const sketch = ({ context }) => {
     },
     // Update & render your scene here
     render({ time }) {
-      mesh.rotation.y = time * (10 * Math.PI /100)
+      mesh.rotation.y = time * (10 * Math.PI /10)
       controls.update();
       renderer.render(scene, camera);
     },

@@ -5,6 +5,7 @@ const canvasSketch = require("canvas-sketch");
 const random = require('canvas-sketch-util/random')
 // Include any additional ThreeJS examples below
 require("three/examples/js/controls/OrbitControls");
+const palettes = require('nice-color-palettes');
 
 
 
@@ -28,7 +29,7 @@ const sketch = ({ context }) => {
 
   // Setup a camera
   const camera = new THREE.OrthographicCamera();
-  camera.position.set(2, 2, -4);
+  camera.position.set(1,1,1);
   camera.lookAt(new THREE.Vector3());
 
   // Setup camera controller
@@ -45,23 +46,38 @@ const sketch = ({ context }) => {
   //   color: "green",
   //   wireframe: true 
   // });
+  const palette = random.pick(palettes)
   const box = new THREE.BoxGeometry(1,1,1);
+  
   // Setup a mesh with geometry + material
-  for (let i=0;i<10;i++) {
+  for (let i=0;i<40;i++) {
     const mesh = new THREE.Mesh(
       box,
-      new THREE.MeshBasicMaterial({
-        color: 'yellow',
+      new THREE.MeshStandardMaterial({
+        color: random.pick(palette),
       })
     );
     mesh.position.set(
       random.range(-1,1),
       random.range(-1,1),
       random.range(-1,1)
+    );
+    mesh.scale.set(
+      random.range(-1,1),
+      random.range(-1,1),
+      random.range(-1,1)
     )
+    mesh.scale.multiplyScalar(0.5)
     scene.add(mesh);
+    
   }
 
+  const light = new THREE.DirectionalLight('white', 0.1);
+  light.position.set(0,0,4);
+  
+  const ambient = new THREE.AmbientLight('hsl(0%,0%,40%)')
+  scene.add(light);
+  scene.add(ambient);
   // scene.add(new THREE.AmbientLight('#59314f'))
 
   // const light = new THREE.PointLight('#45caf7', 1, 15.5);
@@ -77,7 +93,7 @@ const sketch = ({ context }) => {
       const aspect = viewportWidth / viewportHeight;
 
       // Ortho zoom
-      const zoom = 1.0;
+      const zoom = 1.5;
       
       // Bounds
       camera.left = -zoom * aspect;
@@ -98,7 +114,7 @@ const sketch = ({ context }) => {
     },
     // Update & render your scene here
     render({ time }) {
-      mesh.rotation.y = time * (10 * Math.PI /10)
+   
       // controls.update();
       renderer.render(scene, camera);
     },

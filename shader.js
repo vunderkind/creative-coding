@@ -1,13 +1,17 @@
 const canvasSketch = require('canvas-sketch');
 const createShader = require('canvas-sketch-util/shader');
 const glsl = require('glslify');
+const palettes = require('nice-color-palettes')
+const random = require('canvas-sketch-util/random');
 
+const palette = random.pick(palettes)
 // Setup our sketch
 const settings = {
   context: 'webgl',
   animate: true
 };
 
+// console.log(random.value(0,1))
 // Your glsl code
 const frag = glsl(/* glsl */`
   precision highp float;
@@ -16,8 +20,9 @@ const frag = glsl(/* glsl */`
   uniform float aspect;
   varying vec2 vUv;
 
+
   void main () {
-    vec3 colorA = sin(time) + vec3(1.0,0.0,0.0);
+    vec3 colorA = sin(time) + vec3(1,0.0,0.0);
     vec3 colorB = vec3(0.0,1.0,0.0);
     vec2 center = vUv - 0.5;
     center.x*=aspect;
@@ -35,7 +40,7 @@ const sketch = ({ gl }) => {
   // Create the shader and return it
   return createShader({
     // Pass along WebGL context
-    clearColor: '#e2d686',
+    clearColor: `${random.pick(palette)}`,
     gl,
     // Specify fragment and/or vertex shader strings
     frag,
